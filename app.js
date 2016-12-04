@@ -82,7 +82,11 @@ var app = {
         app.getArcs();
         app.drawAll();
 
-        if(!app.bStop) app.iStartAnimTime = setTimeout('app.start();',app.t);
+        if(!app.bStop) {
+            app.iStartAnimTime = setTimeout(function(){
+                app.start();
+            }, app.t);
+        }
     },
 
     animNextStep: function(){
@@ -106,7 +110,9 @@ var app = {
     pause: function(){
         if(app.bStop){
             app.bStop = false;
-            setTimeout('app.start();',app.t);
+            setTimeout(function() {
+                app.start();
+            } ,app.t);
             $('inpS').value = 'pause';
         } else {
             app.bStop = true;
