@@ -1,0 +1,64 @@
+body{
+    background-color:black;
+    color:#999;
+    width:970px;
+}
+canvas{
+    background-color:black;
+    border:1px solid #000;
+}
+table{
+    height:350px;
+}
+td{
+    vertical-align:top;
+    border:1px solid #333;
+}
+td#tdPS{
+    width:450px;
+}
+pre#codePS{
+    max-height:550px; min-height:550px; height:auto !important; height:550px; /* IE6 min-height hack */
+    overflow:scroll;
+    overflow-y:auto;
+    overflow-x:auto;
+    font-size:8pt;
+}
+a{
+    color:#CCF;
+}
+a:hover{color:white;}
+
+input{
+    background-color:#033;
+    border:1px solid #033;
+    color:#999;
+}
+input.inpClick{
+    border:1px solid #033;
+    font-weight:bold;
+}
+input.inpTxt{
+    width:25px;
+}
+input#inpG{
+    width: 60px;
+}
+input#inpS{
+    width: 60px;
+}
+input#inpN{
+    width: 20px;
+}
+input#inpR{
+    width: 20px;
+}
+input#inpFPS{
+    width: 20px;
+}
+input#inpPS{
+    width: 140px;
+}
+input#inpRand{
+    width:100px;
+}
