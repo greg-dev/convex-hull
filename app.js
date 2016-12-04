@@ -3,11 +3,11 @@ window.onload = function(){
 };
 
 var app = {
-    O: new Array(),
-    C: new Array(),
-    Q: new Array(),
-    S: new Array(),
-    A: new Array(),
+    O: [],
+    C: [],
+    Q: [],
+    S: [],
+    A: [],
     cnv: '',
     ctx: '',
     cnvWIDTH: 0,
@@ -38,11 +38,11 @@ var app = {
         app.cnvWIDTH  = parseInt(app.cnv.width);
         app.ctx = app.cnv.getContext('2d');
 
-        app.O = new Array();
-        app.C = new Array();
-        app.Q = new Array();
-        app.S = new Array();
-        app.A = new Array();
+        app.O = [];
+        app.C = [];
+        app.Q = [];
+        app.S = [];
+        app.A = [];
 
         $('inpS').value = 'pause';
 
@@ -96,11 +96,11 @@ var app = {
             C.x+=C.dx;
             C.y+=C.dy;
         }
-        app.O = new Array();
+        app.O = [];
         app.O = app.C.slice();
-        app.S = new Array();
-        app.Q = new Array();
-        app.A = new Array();
+        app.S = [];
+        app.Q = [];
+        app.A = [];
     },
 
     pause: function(){
@@ -200,7 +200,7 @@ var app = {
             A[i].x2 = line.x1; A[(i+1)%ii].x1 = line.x2;
             A[i].y2 = line.y1; A[(i+1)%ii].y1 = line.y2;
         }
-        var polar = new Array();
+        var polar = [];
         for(var i=0,ii=S.length;i<ii;i++){
             polar = toPolarRelated(A[i].x1,A[i].y1,A[i].xo,A[i].yo);
             A[i].f1 = polar[1];
@@ -211,8 +211,8 @@ var app = {
     },
 
     getPS: function(){
-        var arcs = new Array();
-        var circles = new Array();
+        var arcs = [];
+        var circles = [];
 
         for(var i=0,ii=app.A.length;i<ii;i++)
             arcs.push(app.A[i].returnData().join(','));
@@ -297,7 +297,7 @@ function Line(){
         this.B = dLine.B;
         this.C = dLine.C + O1.r*Math.sqrt(dLine.A*dLine.A+dLine.B*dLine.B);
 
-        var polar = new Array();
+        var polar = [];
             polar = toPolarRelated(O2.x,O2.y,O1.x,O1.y);
         var xk = O2.r*Math.cos(polar[1]+3*Math.PI/2)+O1.x;
         var yk = O2.r*Math.sin(polar[1]+3*Math.PI/2)+O1.y;
