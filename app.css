@@ -62,3 +62,10 @@ input#inpPS{
 input#inpRand{
     width:100px;
 }
+input:hover{
+    background-color:#044;
+    color:#FFF;
+}
+input[type="button"]{
+    cursor:pointer;
+}
