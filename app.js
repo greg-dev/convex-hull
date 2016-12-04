@@ -276,51 +276,51 @@ function Line(){
     this.A = 0;
     this.B = 0;
     this.C = 0;
-
-    this.fromPointToPoint = function(x1,y1,x2,y2){
-        if((x1==x2)&&(y1==y2)) { log('<b>line ERROR</b>'); app.init();}
-        this.A = y1-y2;
-        this.B = x2-x1;
-        this.C = (this.A*x1 + this.B*y1)*(-1);
-
-        this.x1 = x1;
-        this.y1 = y1;
-        this.x2 = x2;
-        this.y2 = y2;
-    };
-
-    this.tangent = function(O1,O2,bLeft){
-        var dLine = new Line();
-            dLine.fromPointToPoint(O1.x,O1.y,O2.x,O2.y);
-        this.A = dLine.A;
-        this.B = dLine.B;
-        this.C = dLine.C + O1.r*Math.sqrt(dLine.A*dLine.A+dLine.B*dLine.B);
-
-        var polar = [];
-            polar = toPolarRelated(O2.x,O2.y,O1.x,O1.y);
-        var xk = O2.r*Math.cos(polar[1]+3*Math.PI/2)+O1.x;
-        var yk = O2.r*Math.sin(polar[1]+3*Math.PI/2)+O1.y;
-
-        this.x1 = xk;
-        this.y1 = yk;
-        this.x2 = xk+O2.x-O1.x;
-        this.y2 = yk+O2.y-O1.y;
-    };
-
-    this.destToPoint = function(x,y){
-        var d = (this.A*x+this.B*y+this.C)/Math.sqrt(this.A*this.A+this.B*this.B);
-        return (d>0) ? d : d*(-1);
-    };
-
-    this.draw = function(sColor,bOpaque){
-        app.ctx.beginPath();
-        app.ctx.moveTo(this.x1,this.y1);
-        app.ctx.lineTo(this.x2,this.y2);
-        app.ctx.setStrokeStyle(sColor,bOpaque);
-        app.ctx.stroke();
-        app.ctx.setStrokeStyle('black',false);
-    };
 }
+
+Line.prototype.fromPointToPoint = function(x1,y1,x2,y2){
+    if((x1==x2)&&(y1==y2)) { log('<b>line ERROR</b>'); app.init();}
+    this.A = y1-y2;
+    this.B = x2-x1;
+    this.C = (this.A*x1 + this.B*y1)*(-1);
+
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+};
+
+Line.prototype.tangent = function(O1,O2,bLeft){
+    var dLine = new Line();
+        dLine.fromPointToPoint(O1.x,O1.y,O2.x,O2.y);
+    this.A = dLine.A;
+    this.B = dLine.B;
+    this.C = dLine.C + O1.r*Math.sqrt(dLine.A*dLine.A+dLine.B*dLine.B);
+
+    var polar = [];
+        polar = toPolarRelated(O2.x,O2.y,O1.x,O1.y);
+    var xk = O2.r*Math.cos(polar[1]+3*Math.PI/2)+O1.x;
+    var yk = O2.r*Math.sin(polar[1]+3*Math.PI/2)+O1.y;
+
+    this.x1 = xk;
+    this.y1 = yk;
+    this.x2 = xk+O2.x-O1.x;
+    this.y2 = yk+O2.y-O1.y;
+};
+
+Line.prototype.destToPoint = function(x,y){
+    var d = (this.A*x+this.B*y+this.C)/Math.sqrt(this.A*this.A+this.B*this.B);
+    return (d>0) ? d : d*(-1);
+};
+
+Line.prototype.draw = function(sColor,bOpaque){
+    app.ctx.beginPath();
+    app.ctx.moveTo(this.x1,this.y1);
+    app.ctx.lineTo(this.x2,this.y2);
+    app.ctx.setStrokeStyle(sColor,bOpaque);
+    app.ctx.stroke();
+    app.ctx.setStrokeStyle('black',false);
+};
 
 function Circle(dX,dY,dR){
     this.x = dX;
@@ -331,48 +331,46 @@ function Circle(dX,dY,dR){
 
     this.dx = 1;
     this.dy = 1;
-
-    this.centerToPolarRelated = function(x,y){
-        x = this.x - x;
-        y = this.y - y;
-        this.Cr = Math.sqrt(x*x+y*y);
-
-        if((x>0)&&(y>=0)){  this.Cf = Math.atan(y/x); return; }
-        if((x>0)&&(y<0)){   this.Cf = Math.atan(y/x) + Math.PI * 2; return; }
-        if (x<0){           this.Cf = Math.atan(y/x) + Math.PI; return; }
-        if((x===0)&&(y>0)){  this.Cf = Math.PI/2; return; }
-        if((x===0)&&(y<0)){  this.Cf = Math.PI/2 * 3; return; }
-        if((x===0)&&(y===0)){ this.Cf = 0; return; }
-    };
-
-    // sortuje malejaco wzgl. polarnych (Cf)
-    // jesli Cf takie same, to bierze tego z lewej
-    this.polarSort = function(O1,O2){
-        if(O1.Cf == O2.Cf) return O2.x - O1.x;
-        return O2.Cf - O1.Cf;
-    };
-
-    this.draw = function(sColor,bOpaque){
-        app.ctx.beginPath();
-        app.ctx.arc(this.x,this.y,this.r,0,Math.PI*2,true);
-        app.ctx.setStrokeStyle(sColor,bOpaque);
-        if(sColor == 'aqua'){
-            app.ctx.fillStyle = "rgba(0,255,255,0.05)";
-            app.ctx.fill();
-            app.ctx.fillStyle = "rgba(0,0,0,1)";
-        }
-        app.ctx.stroke();
-        app.ctx.setStrokeStyle('black',false);
-
-        app.ctx.beginPath();
-        app.ctx.arc(this.x,this.y,1,0,Math.PI*2,true);
-        app.ctx.fill();
-    };
-
-    this.returnData = function(){
-        return [this.x,this.y];
-    };
 }
+
+Circle.prototype.centerToPolarRelated = function(x,y){
+    x = this.x - x;
+    y = this.y - y;
+    this.Cr = Math.sqrt(x*x+y*y);
+
+    if((x>0)&&(y>=0)){  this.Cf = Math.atan(y/x); return; }
+    if((x>0)&&(y<0)){   this.Cf = Math.atan(y/x) + Math.PI * 2; return; }
+    if (x<0){           this.Cf = Math.atan(y/x) + Math.PI; return; }
+    if((x===0)&&(y>0)){  this.Cf = Math.PI/2; return; }
+    if((x===0)&&(y<0)){  this.Cf = Math.PI/2 * 3; return; }
+    if((x===0)&&(y===0)){ this.Cf = 0; return; }
+};
+
+Circle.prototype.polarSort = function(O1,O2){
+    if(O1.Cf == O2.Cf) return O2.x - O1.x;
+    return O2.Cf - O1.Cf;
+};
+
+Circle.prototype.draw = function(sColor,bOpaque){
+    app.ctx.beginPath();
+    app.ctx.arc(this.x,this.y,this.r,0,Math.PI*2,true);
+    app.ctx.setStrokeStyle(sColor,bOpaque);
+    if(sColor == 'aqua'){
+        app.ctx.fillStyle = "rgba(0,255,255,0.05)";
+        app.ctx.fill();
+        app.ctx.fillStyle = "rgba(0,0,0,1)";
+    }
+    app.ctx.stroke();
+    app.ctx.setStrokeStyle('black',false);
+
+    app.ctx.beginPath();
+    app.ctx.arc(this.x,this.y,1,0,Math.PI*2,true);
+    app.ctx.fill();
+};
+
+Circle.prototype.returnData = function(){
+    return [this.x,this.y];
+};
 
 function Arc(){
     // luk od P1(x1,y1) do P2(x2,y2) srodek O(xo,yo)
@@ -380,28 +378,28 @@ function Arc(){
     this.x1 = 0; this.y1 = 0; this.f1 = 0;
     this.x2 = 0; this.y2 = 0; this.f2 = 0;
     this.xo = 0; this.yo = 0;
-
-    this.draw = function(sColor,bOpaque){
-        app.ctx.beginPath();
-        app.ctx.arc(this.xo,this.yo,app.R,this.f1,this.f2,false);
-        app.ctx.setStrokeStyle(sColor,bOpaque);
-        app.ctx.stroke();
-        app.ctx.setStrokeStyle('black',false);
-    };
-
-    this.returnData = function(){
-        return [
-            this.xo,
-            this.yo,
-            this.x1,
-            this.y1,
-            this.x2,
-            this.y2,
-            this.f1*180/Math.PI,
-            this.f2*180/Math.PI
-        ];
-    };
 }
+
+Arc.prototype.draw = function(sColor,bOpaque){
+    app.ctx.beginPath();
+    app.ctx.arc(this.xo,this.yo,app.R,this.f1,this.f2,false);
+    app.ctx.setStrokeStyle(sColor,bOpaque);
+    app.ctx.stroke();
+    app.ctx.setStrokeStyle('black',false);
+};
+
+Arc.prototype.returnData = function(){
+    return [
+        this.xo,
+        this.yo,
+        this.x1,
+        this.y1,
+        this.x2,
+        this.y2,
+        this.f1*180/Math.PI,
+        this.f2*180/Math.PI
+    ];
+};
 
 // wyznacznik macierzy dla trzech punktow
 function detThreePoints(x1,y1,x2,y2,x3,y3){
