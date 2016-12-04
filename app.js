@@ -30,6 +30,22 @@ var app = {
         app.cnvWIDTH  = parseInt(app.cnv.width);
         app.ctx = app.cnv.getContext('2d');
 
+        app.ctx.setStrokeStyle = function(sColor,bOpaque){
+            var oColors = {
+                black: [0,0,0],
+                red: [255,0,0],
+                green: [0,255,0],
+                blue: [0,0,255],
+                aqua: [0,255,255],
+                yellow: [255,255,0],
+                white: [255,255,255]
+            };
+            var rgba = oColors[sColor];
+            rgba.push(bOpaque ? 0.5 : 1);
+
+            app.ctx.strokeStyle = "rgba(" + rgba.join(",") + ")";
+        };
+
         app.O = [];
         app.C = [];
         app.Q = [];
@@ -115,7 +131,7 @@ var app = {
     updateFPS: function(ms) {
         app.t = Math.floor(1000/ms);
     },
-    
+
     switchRandom: function(){
         app.bRandom = ($('inpRand').value == 'randomize on') ? false : true;
         $('inpRand').value = (app.bRandom) ? 'randomize on' : 'randomize off';
@@ -300,9 +316,9 @@ function Line(){
         app.ctx.beginPath();
         app.ctx.moveTo(this.x1,this.y1);
         app.ctx.lineTo(this.x2,this.y2);
-        setColor(sColor,bOpaque);
+        app.ctx.setStrokeStyle(sColor,bOpaque);
         app.ctx.stroke();
-        app.ctx.strokeStyle = "rgba(0,0,0,1)";
+        app.ctx.setStrokeStyle('black',false);
     };
 }
 
@@ -339,14 +355,14 @@ function Circle(dX,dY,dR){
     this.draw = function(sColor,bOpaque){
         app.ctx.beginPath();
         app.ctx.arc(this.x,this.y,this.r,0,Math.PI*2,true);
-        setColor(sColor,bOpaque);
+        app.ctx.setStrokeStyle(sColor,bOpaque);
         if(sColor == 'aqua'){
             app.ctx.fillStyle = "rgba(0,255,255,0.05)";
             app.ctx.fill();
             app.ctx.fillStyle = "rgba(0,0,0,1)";
         }
         app.ctx.stroke();
-        app.ctx.strokeStyle = "rgba(0,0,0,1)";
+        app.ctx.setStrokeStyle('black',false);
 
         app.ctx.beginPath();
         app.ctx.arc(this.x,this.y,1,0,Math.PI*2,true);
@@ -368,10 +384,9 @@ function Arc(){
     this.draw = function(sColor,bOpaque){
         app.ctx.beginPath();
         app.ctx.arc(this.xo,this.yo,app.R,this.f1,this.f2,false);
-        setColor(sColor,bOpaque);
+        app.ctx.setStrokeStyle(sColor,bOpaque);
         app.ctx.stroke();
-
-        app.ctx.strokeStyle = "rgba(0,0,0,1)";
+        app.ctx.setStrokeStyle('black',false);
     };
 
     this.returnData = function(){
@@ -386,21 +401,6 @@ function Arc(){
             this.f2*180/Math.PI
         ];
     };
-}
-
-function setColor(sColor,bOpaque){
-    var oColors = {
-        red: [255,0,0],
-        green: [0,255,0],
-        blue: [0,0,255],
-        aqua: [0,255,255],
-        yellow: [255,255,0],
-        white: [255,255,255]
-    };
-    var rgba = oColors[sColor];
-    rgba.push(bOpaque ? 0.5 : 1);
-
-    app.ctx.strokeStyle = "rgba(" + rgba.join(",") + ")";
 }
 
 // wyznacznik macierzy dla trzech punktow
