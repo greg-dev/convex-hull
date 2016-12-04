@@ -12,7 +12,7 @@ var app = {
     ctx: '',
     cnvWIDTH: 0,
     cnvHEIGHT: 0,
-    
+
     n: 10,
     R: 10,
     t: 20,
@@ -20,32 +20,32 @@ var app = {
 
     bStop: false,
     iStartAnimTime: 0,
-    
+
     Xmin: 0, iOxmin: 0, XminR: 0, iOxminR: 0,
     Xmax: 0, iOxmax: 0, XmaxR: 0, iOxmaxR: 0,
     Ymin: 0, iOymin: 0, YminR: 0, iOyminR: 0,
     Ymax: 0, iOymax: 0, YmaxR: 0, iOymaxR: 0,
     YminLeft: 0, iOyminLeft: 0,
-    
+
     lineYmaxXmax: new Line(),
     lineXmaxYmin: new Line(),
     lineYminXmin: new Line(),
     lineXminYmax: new Line(),
-    
+
     init: function(){
         app.cnv = document.getElementById('canvas');
         app.cnvHEIGHT = parseInt(app.cnv.height);
         app.cnvWIDTH  = parseInt(app.cnv.width);
         app.ctx = app.cnv.getContext('2d');
-        
+
         app.O = new Array();
         app.C = new Array();
         app.Q = new Array();
         app.S = new Array();
         app.A = new Array();
-        
+
         $('inpS').value = 'pause';
-        
+
         if(app.bRandom){
             app.n = Math.floor(Math.random()*50+5);
             app.R = Math.floor(Math.random()*50+30);
@@ -67,13 +67,13 @@ var app = {
             app.C[i].dx = (Math.random()<0.5) ? (-1)*(Math.random()*3+Math.random()*3) : Math.random()*3+Math.random()*3;
             app.C[i].dy = (Math.random()<0.5) ? (-1)*(Math.random()*3+Math.random()*3) : Math.random()*3+Math.random()*3;
         }
-        
+
         clearTimeout(app.iStartAnimTime);
         $('codePS').innerHTML = '<br/>';
         app.bStop = false;
         app.start();
     },
-    
+
     start: function(){
         app.animNextStep();
 
@@ -81,10 +81,10 @@ var app = {
         app.grahamsScan();
         app.getArcs();
         app.drawAll();
-        
+
         if(!app.bStop) app.iStartAnimTime = setTimeout('app.start();',app.t);
     },
-    
+
     animNextStep: function(){
         clearTimeout(app.iStartAnimTime);
         app.ctx.clearRect(0,0,app.cnvWIDTH,app.cnvHEIGHT);
@@ -102,7 +102,7 @@ var app = {
         app.Q = new Array();
         app.A = new Array();
     },
-    
+
     pause: function(){
         if(app.bStop){
             app.bStop = false;
@@ -122,25 +122,25 @@ var app = {
         app.bRandom = ($('inpRand').value == 'randomize on') ? false : true;
         $('inpRand').value = (app.bRandom) ? 'randomize on' : 'randomize off';
     },
-    
+
     drawAll: function(){
         for(var i=0,ii=app.Q.length;i<ii;i++)
             app.Q[i].draw('white',true);
 
         for(var i=0,ii=app.S.length;i<ii;i++)
             app.S[i].draw('aqua',false);
-        
+
         var A = app.A;
         var line = new Line();
         for(var i=0,ii=A.length;i<ii;i++){
             app.ctx.lineWidth = 3;
             line.fromPointToPoint(A[i].x2,A[i].y2,A[(i+1)%ii].x1,A[(i+1)%ii].y1);
-            line.draw('white',false); 
+            line.draw('white',false);
             A[i].draw('red',false);
             app.ctx.lineWidth = 0.5;
         }
     },
-    
+
     prepareDataToScan: function(){
         // znajdz okrag o najmniejszym Y, najbardziej wysuniety w lewo
         app.YminLeft = app.O[0].y;
@@ -149,25 +149,25 @@ var app = {
                 app.YminLeft = app.O[i].y;
                 app.iOyminLeft = i;
             }
-        
+
         // zamien wszystko na polarne WZGLEDEM powyzszego
         for(var i=0,ii=app.O.length;i<ii;i++){
             app.O[i].centerToPolarRelated(app.O[app.iOyminLeft].x,app.O[app.iOyminLeft].y);
         }
-                
+
         // sortuj rosnaco wedlug wspolrzednych polarnych (kat Cf)
         app.O.sort(app.O[0].polarSort);
-        
+
         // usun okregi o tych samych srodkach
         for(var i=0,ii=app.O.length;i<ii;i++){
             if((app.O[i].x == app.O[(i+1)%ii].x)&&(app.O[i].y == app.O[(i+1)%ii].y)){
                 app.O.splice(i,1);
                 ii--;
-                i--; 
+                i--;
             }
         }
     },
-    
+
     grahamsScan: function(){
         var O = app.O;
         var S = app.S;
@@ -185,7 +185,7 @@ var app = {
             S.push(Opi);
         }
     },
-    
+
     getArcs: function(){
         // przygotowanie danych do rysowania
         var line = new Line();
@@ -194,7 +194,7 @@ var app = {
         for(var i=0,ii=S.length;i<ii;i++){ A.push(new Arc()); }
         for(var i=0,ii=S.length;i<ii;i++){
             line.tangent(S[i],S[(i+1)%ii]);
-            
+
             A[i].xo = S[i].x;
             A[i].yo = S[i].y;
             A[i].x2 = line.x1; A[(i+1)%ii].x1 = line.x2;
@@ -207,23 +207,23 @@ var app = {
             polar = toPolarRelated(A[i].x2,A[i].y2,A[i].xo,A[i].yo);
             A[i].f2 = polar[1];
         }
-        
+
     },
 
     getPS: function(){
         var arcs = new Array();
         var circles = new Array();
-        
+
         for(var i=0,ii=app.A.length;i<ii;i++)
             arcs.push(app.A[i].returnData().join(','));
-        
+
         for(var i=0,ii=app.C.length;i<ii;i++)
             circles.push(app.C[i].returnData().join(','));
-    
+
         var request = new Ajax.Request('generator.php', {
             method: 'POST',
             parameters: [
-                'R='+app.R, 
+                'R='+app.R,
                 'arcs='+arcs.join('|'),
                 'circles='+circles.join('|')
             ].join('&'),
@@ -242,7 +242,7 @@ var app = {
                $('codePS').innerHTML = responseText;
            } else {
                $('codePS').innerHTML = 'PostScript generator error';
-           } 
+           }
         } else {
             $('codePS').innerHTML = 'PostScript generator error';
         }
@@ -250,7 +250,7 @@ var app = {
     getPSerror: function(){
         $('codePS').innerHTML = 'loadPSfile';
     },
-    
+
     loadPSfile: function(){
         var request = new Ajax.Request('geometria.ps', {
             method: 'get',
@@ -273,30 +273,30 @@ function Line(){
     this.y1 = 0;
     this.x2 = 0;
     this.y2 = 0;
-    
+
     this.A = 0;
     this.B = 0;
     this.C = 0;
-    
+
     this.fromPointToPoint = function(x1,y1,x2,y2){
         if((x1==x2)&&(y1==y2)) { log('<b>line ERROR</b>'); app.init();}
         this.A = y1-y2;
         this.B = x2-x1;
         this.C = (this.A*x1 + this.B*y1)*(-1);
-        
+
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
     };
-    
-    this.tangent = function(O1,O2,bLeft){                
+
+    this.tangent = function(O1,O2,bLeft){
         var dLine = new Line();
             dLine.fromPointToPoint(O1.x,O1.y,O2.x,O2.y);
         this.A = dLine.A;
         this.B = dLine.B;
         this.C = dLine.C + O1.r*Math.sqrt(dLine.A*dLine.A+dLine.B*dLine.B);
-            
+
         var polar = new Array();
             polar = toPolarRelated(O2.x,O2.y,O1.x,O1.y);
         var xk = O2.r*Math.cos(polar[1]+3*Math.PI/2)+O1.x;
@@ -307,12 +307,12 @@ function Line(){
         this.x2 = xk+O2.x-O1.x;
         this.y2 = yk+O2.y-O1.y;
     };
-    
+
     this.destToPoint = function(x,y){
         var d = (this.A*x+this.B*y+this.C)/Math.sqrt(this.A*this.A+this.B*this.B);
         return (d>0) ? d : d*(-1);
     };
-    
+
     this.draw = function(sColor,bOpaque){
         app.ctx.beginPath();
         app.ctx.moveTo(this.x1,this.y1);
@@ -329,15 +329,15 @@ function Circle(dX,dY,dR){
     this.r = (dR > 0) ? dR : (-1)*dR;
     this.Cr = 0;
     this.Cf = 0;
-    
+
     this.dx = 1;
     this.dy = 1;
-    
+
     this.centerToPolarRelated = function(x,y){
         x = this.x - x;
         y = this.y - y;
         this.Cr = Math.sqrt(x*x+y*y);
-        
+
         if((x>0)&&(y>=0)){  this.Cf = Math.atan(y/x); return; }
         if((x>0)&&(y<0)){   this.Cf = Math.atan(y/x) + Math.PI * 2; return; }
         if (x<0){           this.Cf = Math.atan(y/x) + Math.PI; return; }
@@ -345,14 +345,14 @@ function Circle(dX,dY,dR){
         if((x==0)&&(y<0)){  this.Cf = Math.PI/2 * 3; return; }
         if((x==0)&&(y==0)){ this.Cf = 0; return; }
     };
-    
+
     // sortuje malejaco wzgl. polarnych (Cf)
     // jesli Cf takie same, to bierze tego z lewej
     this.polarSort = function(O1,O2){
         if(O1.Cf == O2.Cf) return O2.x - O1.x;
         return O2.Cf - O1.Cf;
     };
-    
+
     this.draw = function(sColor,bOpaque){
         app.ctx.beginPath();
         app.ctx.arc(this.x,this.y,this.r,0,Math.PI*2,true);
@@ -363,13 +363,13 @@ function Circle(dX,dY,dR){
             app.ctx.fillStyle = "rgba(0,0,0,1)";
         }
         app.ctx.stroke();
-        app.ctx.strokeStyle = "rgba(0,0,0,1)";   
-        
+        app.ctx.strokeStyle = "rgba(0,0,0,1)";
+
         app.ctx.beginPath();
         app.ctx.arc(this.x,this.y,1,0,Math.PI*2,true);
         app.ctx.fill();
     };
-    
+
     this.returnData = function(){
         return [this.x,this.y];
     };
@@ -381,16 +381,16 @@ function Arc(){
     this.x1 = 0; this.y1 = 0; this.f1 = 0;
     this.x2 = 0; this.y2 = 0; this.f2 = 0;
     this.xo = 0; this.yo = 0;
-    
+
     this.draw = function(sColor,bOpaque){
         app.ctx.beginPath();
         app.ctx.arc(this.xo,this.yo,app.R,this.f1,this.f2,false);
         setColor(sColor,bOpaque);
         app.ctx.stroke();
-        
+
         app.ctx.strokeStyle = "rgba(0,0,0,1)";
     };
-    
+
     this.returnData = function(){
         return [
             this.xo,
@@ -434,7 +434,7 @@ function toPolarRelated(x,y,x0,y0){
     x = x - x0;
     y = y - y0;
     Cr = Math.sqrt(x*x+y*y);
-        
+
     if((x>0)&&(y>=0))  Cf = Math.atan(y/x);
     if((x>0)&&(y<0))   Cf = Math.atan(y/x) + Math.PI * 2;
     if (x<0)           Cf = Math.atan(y/x) + Math.PI;
