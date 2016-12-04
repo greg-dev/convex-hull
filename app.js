@@ -347,9 +347,9 @@ function Circle(dX,dY,dR){
         if((x>0)&&(y>=0)){  this.Cf = Math.atan(y/x); return; }
         if((x>0)&&(y<0)){   this.Cf = Math.atan(y/x) + Math.PI * 2; return; }
         if (x<0){           this.Cf = Math.atan(y/x) + Math.PI; return; }
-        if((x==0)&&(y>0)){  this.Cf = Math.PI/2; return; }
-        if((x==0)&&(y<0)){  this.Cf = Math.PI/2 * 3; return; }
-        if((x==0)&&(y==0)){ this.Cf = 0; return; }
+        if((x===0)&&(y>0)){  this.Cf = Math.PI/2; return; }
+        if((x===0)&&(y<0)){  this.Cf = Math.PI/2 * 3; return; }
+        if((x===0)&&(y===0)){ this.Cf = 0; return; }
     };
 
     // sortuje malejaco wzgl. polarnych (Cf)
@@ -444,8 +444,8 @@ function toPolarRelated(x,y,x0,y0){
     if((x>0)&&(y>=0))  Cf = Math.atan(y/x);
     if((x>0)&&(y<0))   Cf = Math.atan(y/x) + Math.PI * 2;
     if (x<0)           Cf = Math.atan(y/x) + Math.PI;
-    if((x==0)&&(y>=0)) Cf = Math.PI/2;
-    if((x==0)&&(y<0))  Cf = Math.PI/2 * 3;
+    if((x===0)&&(y>=0)) Cf = Math.PI/2;
+    if((x===0)&&(y<0))  Cf = Math.PI/2 * 3;
     return [Cr,Cf];
 }
 
@@ -464,9 +464,9 @@ function isNumeric(sString){
     var sChar;
     var bResult = true;
 
-    if(sString.length == 0) return false;
+    if(sString.length === 0) return false;
 
-    for(i = 0; i < sString.length && bResult == true; i++){
+    for(i = 0; i < sString.length && bResult === true; i++){
         sChar = sString.charAt(i);
         if(sValidChars.indexOf(sChar) == -1) bResult = false;
     }
