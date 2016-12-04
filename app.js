@@ -21,16 +21,8 @@ var app = {
     bStop: false,
     iStartAnimTime: 0,
 
-    Xmin: 0, iOxmin: 0, XminR: 0, iOxminR: 0,
-    Xmax: 0, iOxmax: 0, XmaxR: 0, iOxmaxR: 0,
-    Ymin: 0, iOymin: 0, YminR: 0, iOyminR: 0,
-    Ymax: 0, iOymax: 0, YmaxR: 0, iOymaxR: 0,
-    YminLeft: 0, iOyminLeft: 0,
-
-    lineYmaxXmax: new Line(),
-    lineXmaxYmin: new Line(),
-    lineYminXmin: new Line(),
-    lineXminYmax: new Line(),
+    YminLeft: 0,
+    iOyminLeft: 0,
 
     init: function(){
         app.cnv = document.getElementById('canvas');
@@ -255,22 +247,7 @@ var app = {
     },
     getPSerror: function(){
         $('codePS').innerHTML = 'loadPSfile';
-    },
-
-    loadPSfile: function(){
-        var request = new Ajax.Request('geometria.ps', {
-            method: 'get',
-            asynchronous: true,
-            onComplete: app.loadPSfileSuccess,
-            onError: app.loadPSfileError
-        });
-    },
-    loadPSfileSuccess: function(originalRequest){
-        $('codePS').innerHTML = originalRequest.responseText;
-    },
-    loadPSfileError: function(){
-        alert('Cannot load PostScript file');
-    },
+    }
 };
 
 
