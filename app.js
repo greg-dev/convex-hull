@@ -508,3 +508,7 @@ function isNumeric(sString){
 function log(sText){
     $('codePS').innerHTML += '<br> '+sText;
 }
+
+function $(id){
+    return document.getElementById(id);
+}
