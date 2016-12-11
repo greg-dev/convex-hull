@@ -225,29 +225,6 @@ var app = {
     },
 
     getPS: function(){
-        var arcs = [];
-        var circles = [];
-
-        for(var i=0,ii=app.A.length;i<ii;i++)
-            arcs.push(app.A[i].returnData().join(','));
-
-        for(var i=0,ii=app.C.length;i<ii;i++)
-            circles.push(app.C[i].returnData().join(','));
-
-        var request = new Ajax.Request('generator.php', {
-            method: 'POST',
-            parameters: [
-                'R='+app.R,
-                'arcs='+arcs.join('|'),
-                'circles='+circles.join('|')
-            ].join('&'),
-            asynchronous: true,
-            onComplete: app.getPSsuccess,
-            onError: app.getPSerror
-        });
-    },
-
-    getPS: function(){
         var R = app.R;
         var A = [];
         var C = [];
@@ -343,24 +320,6 @@ var app = {
         });
 
         $('codePS').innerHTML = ps.join("\n");
-    },
-
-    getPSsuccess: function(originalRequest){
-        var response = originalRequest.responseText.split('***');
-        if(response.length == 2){
-           var responseStatus = response[0];
-           var responseText = response[1];
-           if('OK'==responseStatus){
-               $('codePS').innerHTML = responseText;
-           } else {
-               $('codePS').innerHTML = 'PostScript generator error';
-           }
-        } else {
-            $('codePS').innerHTML = 'PostScript generator error';
-        }
-    },
-    getPSerror: function(){
-        $('codePS').innerHTML = 'loadPSfile';
     }
 };
 
