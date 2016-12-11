@@ -247,6 +247,104 @@ var app = {
         });
     },
 
+    getPS: function(){
+        var R = app.R;
+        var A = [];
+        var C = [];
+
+        app.A.forEach(function(a){
+            A.push(JSON.parse(JSON.stringify(a)));
+        });
+        app.C.forEach(function(c){
+            C.push(JSON.parse(JSON.stringify(c)));
+        });
+
+        var Xmin = C[0].x;
+        var Xmax = C[0].x;
+        var Ymin = C[0].y;
+        var Ymax = C[0].y;
+
+        C.forEach(function(c){
+            if(c.x < Xmin) Xmin = c.x;
+            if(c.x > Xmax) Xmax = c.x;
+            if(c.y < Ymin) Ymin = c.y;
+            if(c.y > Ymax) Ymax = c.y;
+        });
+
+        var maxWidth  = Xmax - Xmin + 2 * R;
+        var maxHeight = Ymax - Ymin + 2 * R;
+
+        var PAGEWIDTH  = 500;
+        var PAGEHEIGHT = 550;
+
+        var scale = (maxHeight > maxWidth) ? PAGEHEIGHT/maxHeight : PAGEWIDTH/maxWidth;
+
+        A.forEach(function(a,i){
+            A[i].xo = (a.xo - Xmin + R)*scale;
+            A[i].yo = (a.yo - Ymin + R)*scale;
+            A[i].x1 = (a.x1 - Xmin + R)*scale;
+            A[i].y1 = (a.y1 - Ymin + R)*scale;
+            A[i].x2 = (a.x2 - Xmin + R)*scale;
+            A[i].y2 = (a.y2 - Ymin + R)*scale;
+        });
+
+        C.forEach(function(c,i){
+            C[i].x = (c.x - Xmin + R)*scale;
+            C[i].y = (c.y - Ymin + R)*scale;
+        });
+
+        R = R * scale;
+
+        var ps = [
+            "/myLine  { newpath moveto lineto stroke }def",
+            "/myArc   { newpath arc stroke }def",
+            "/myCircle{ newpath "+R.toFixed(5)+" 0 360 arc stroke }def",
+            "",
+            ""
+        ];
+
+        A.forEach(function(a,i){
+            ps.push(
+                [
+                    a.xo.toFixed(6),
+                    a.yo.toFixed(6),
+                    R.toFixed(5),
+                    (a.f1*180/Math.PI).toFixed(6),
+                    (a.f2*180/Math.PI).toFixed(6),
+                    "myArc"
+                ].join(" ")
+            );
+        });
+
+        ps.push("\n");
+
+        A.forEach(function(a,i){
+            ps.push(
+                [
+                    a.x2.toFixed(6),
+                    a.y2.toFixed(6),
+                    Number(A[(i+1) % A.length]['x1'].toFixed(5)),
+                    Number(A[(i+1) % A.length]['y1'].toFixed(5)),
+                    "myLine"
+                ].join(" ")
+            );
+        });
+
+        ps.push("\n");
+
+        C.forEach(function(c,i){
+             ps.push(
+                 [
+                     c.x.toFixed(6),
+                     c.y.toFixed(6),
+                     "myCircle"
+                 ].join(" ")
+             );
+        });
+
+        $('codePS').innerHTML = ps.join("\n");
+    },
+
     getPSsuccess: function(originalRequest){
         var response = originalRequest.responseText.split('***');
         if(response.length == 2){
