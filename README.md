@@ -1,4 +1,4 @@
-# Visualisation of algorithm for finding the convex hull of circles
+## Visualisation of algorithm for finding the convex hull of circles
 
 Just a pointless HTML 5 canvas experiment. It was a second JavaScript project in my life, 
 created for my studies (Computational Geometry course) in 2008. 
@@ -10,3 +10,5 @@ allowing to easily change number of circles, radius and control the animation.
 
 ### Live demo:
 https://greg-dev.github.io/convex-hull/
+
+![Preview](https://cloud.githubusercontent.com/assets/24360603/21099420/6171f9f8-c06e-11e6-9914-1f86eb088589.png "Preview")
