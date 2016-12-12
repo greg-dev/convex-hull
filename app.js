@@ -156,7 +156,6 @@ var app = {
     },
 
     prepareDataToScan: function(){
-        // znajdz okrag o najmniejszym Y, najbardziej wysuniety w lewo
         app.YminLeft = app.O[0].y;
         for(var i=0,ii=app.O.length;i<ii;i++)
             if(app.O[i].y <= app.YminLeft){
@@ -164,15 +163,12 @@ var app = {
                 app.iOyminLeft = i;
             }
 
-        // zamien wszystko na polarne WZGLEDEM powyzszego
         for(var i=0,ii=app.O.length;i<ii;i++){
             app.O[i].centerToPolarRelated(app.O[app.iOyminLeft].x,app.O[app.iOyminLeft].y);
         }
 
-        // sortuj rosnaco wedlug wspolrzednych polarnych (kat Cf)
         app.O.sort(app.O[0].polarSort);
 
-        // usun okregi o tych samych srodkach
         for(var i=0,ii=app.O.length;i<ii;i++){
             if((app.O[i].x == app.O[(i+1)%ii].x)&&(app.O[i].y == app.O[(i+1)%ii].y)){
                 app.O.splice(i,1);
@@ -192,7 +188,7 @@ var app = {
         S.push(O.pop());
         for(var i=iOlength-3;i>-1;i--){
             Opi = O.pop();
-            // wieksze LUB ROWNE obejmuje rowniez okregi o tych samych srodkach
+
             while (0 <= detThreeCenters(S[S.length-2],Opi,S[S.length-1]))
                 Q.push(S.pop());
 
@@ -201,7 +197,6 @@ var app = {
     },
 
     getArcs: function(){
-        // przygotowanie danych do rysowania
         var line = new Line();
         var S = app.S;
         var A = app.A;
@@ -300,8 +295,8 @@ var app = {
                 [
                     a.x2.toFixed(6),
                     a.y2.toFixed(6),
-                    Number(A[(i+1) % A.length]['x1'].toFixed(5)),
-                    Number(A[(i+1) % A.length]['y1'].toFixed(5)),
+                    Number(A[(i+1) % A.length].x1.toFixed(5)),
+                    Number(A[(i+1) % A.length].y1.toFixed(5)),
                     "myLine"
                 ].join(" ")
             );
@@ -336,7 +331,6 @@ function Line(){
 }
 
 Line.prototype.fromPointToPoint = function(x1,y1,x2,y2){
-    if((x1==x2)&&(y1==y2)) { log('<b>line ERROR</b>'); app.init();}
     this.A = y1-y2;
     this.B = x2-x1;
     this.C = (this.A*x1 + this.B*y1)*(-1);
@@ -439,11 +433,10 @@ Arc.prototype.draw = function(sColor,bOpaque){
     app.ctx.setStrokeStyle('black',false);
 };
 
-// wyznacznik macierzy dla trzech punktow
 function detThreePoints(x1,y1,x2,y2,x3,y3){
     return x1*y2+y1*x3+x2*y3-x1*y3-y1*x2-y2*x3;
 }
-// wyznacznik macierzy dla srodkow trzech okregow
+
 function detThreeCenters(O1,O2,O3){
     return detThreePoints(O1.x,O1.y,O2.x,O2.y,O3.x,O3.y);
 }
@@ -466,7 +459,7 @@ function checkDecimal(inp,iMin,iMax,iDefault){
     var sString = inp.value;
     if(!isNumeric(sString) || (sString<iMin) || (iMax<sString)){
         inp.value = iDefault;
-        alert('Wymagana liczba calkowita z zakresu ['+iMin+','+iMax+']');
+        alert("Please enter an integer between " + iMin + " and " + iMax);
         return false;
     }
     return true;
@@ -484,10 +477,6 @@ function isNumeric(sString){
         if(sValidChars.indexOf(sChar) == -1) bResult = false;
     }
     return bResult;
-}
-
-function log(sText){
-    $('codePS').innerHTML += '<br> '+sText;
 }
 
 function $(id){
