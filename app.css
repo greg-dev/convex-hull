@@ -33,6 +33,7 @@ input{
     background-color:#033;
     border:1px solid #033;
     color:#999;
+    outline: none;
 }
 input.inpClick{
     border:1px solid #033;
