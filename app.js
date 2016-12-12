@@ -293,7 +293,7 @@ var app = {
             );
         });
 
-        ps.push("\n");
+        ps.push("");
 
         A.forEach(function(a,i){
             ps.push(
@@ -307,7 +307,7 @@ var app = {
             );
         });
 
-        ps.push("\n");
+        ps.push("");
 
         C.forEach(function(c,i){
              ps.push(
@@ -425,13 +425,7 @@ Circle.prototype.draw = function(sColor,bOpaque){
     app.ctx.fill();
 };
 
-Circle.prototype.returnData = function(){
-    return [this.x,this.y];
-};
-
 function Arc(){
-    // luk od P1(x1,y1) do P2(x2,y2) srodek O(xo,yo)
-    // wspolrzedne polarne - f1,f2 - katy, promien staly
     this.x1 = 0; this.y1 = 0; this.f1 = 0;
     this.x2 = 0; this.y2 = 0; this.f2 = 0;
     this.xo = 0; this.yo = 0;
@@ -443,19 +437,6 @@ Arc.prototype.draw = function(sColor,bOpaque){
     app.ctx.setStrokeStyle(sColor,bOpaque);
     app.ctx.stroke();
     app.ctx.setStrokeStyle('black',false);
-};
-
-Arc.prototype.returnData = function(){
-    return [
-        this.xo,
-        this.yo,
-        this.x1,
-        this.y1,
-        this.x2,
-        this.y2,
-        this.f1*180/Math.PI,
-        this.f2*180/Math.PI
-    ];
 };
 
 // wyznacznik macierzy dla trzech punktow
