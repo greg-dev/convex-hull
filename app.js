@@ -413,10 +413,6 @@ Circle.prototype.draw = function(sColor,bOpaque){
     }
     app.ctx.stroke();
     app.ctx.setStrokeStyle('black',false);
-
-    app.ctx.beginPath();
-    app.ctx.arc(this.x,this.y,1,0,Math.PI*2,true);
-    app.ctx.fill();
 };
 
 function Arc(){
