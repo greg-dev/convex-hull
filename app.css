@@ -70,3 +70,17 @@ input:hover{
 input[type="button"]{
     cursor:pointer;
 }
+::-moz-selection{
+    background-color:inherit;
+}
+::selection{
+    background-color:inherit;
+}
+pre::-moz-selection{
+    background-color:#044;
+    color:#fff;
+}
+pre::selection{
+    background-color:#044;
+    color:rgba(255,255,255,0.99);
+}
