@@ -59,6 +59,8 @@ var app = {
             app.R = Math.floor(Math.random()*50+30);
             $('inpN').value = app.n;
             $('inpR').value = app.R;
+            $('inpN').disabled = true;
+            $('inpR').disabled = true;
         } else {
             app.n = parseInt($('inpN').value);
             app.R = parseInt($('inpR').value);
@@ -166,6 +168,8 @@ var app = {
     switchRandom: function(){
         app.bRandom = ($('inpRand').value == 'randomize on') ? false : true;
         $('inpRand').value = (app.bRandom) ? 'randomize on' : 'randomize off';
+        $('inpN').disabled = app.bRandom;
+        $('inpR').disabled = app.bRandom;
     },
 
     drawAll: function(){

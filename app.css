@@ -70,6 +70,12 @@ input:hover{
 input[type="button"]{
     cursor:pointer;
 }
+input[disabled]{
+    border:1px solid #011;
+    background-color:#022;
+    color:#666 !important;
+    cursor:default;
+}
 ::-moz-selection{
     background-color:inherit;
 }
