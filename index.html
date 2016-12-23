@@ -14,8 +14,10 @@
           <label for="inpR">r:</label>
           <input id="inpR" type="text" maxlength="2" value="30" onchange="checkDecimal(this,2,99,30);"/>
           <input id="inpRand" type="button" value="randomize on" onclick="app.switchRandom();">
-          <label for="inpFPS">fps:</label>
-          <input id="inpFPS" type="text" maxlength="2" value="50" onchange="if(checkDecimal(this,1,99,50)){app.updateFPS(this.value)};"/>
+          <label for="inpFPS">speed:</label>
+          <input id="inpFPS" type="text" maxlength="2" value="50" onchange="if(checkDecimal(this,1,99,50)){app.updateSpeed(this.value)};"/>
+          <input id="inpSlower" type="button" value="slower" onclick="app.speedDown();"/>
+          <input id="inpFaster" type="button" value="faster" onclick="app.speedUp();"/>
           <input id="inpS" type="button" value="pause" onclick="app.pause();"/>
         </td>
         <td>

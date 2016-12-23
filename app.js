@@ -128,8 +128,39 @@ var app = {
         }
     },
 
-    updateFPS: function(ms) {
-        app.t = Math.floor(1000/ms);
+    speedUp: function(){
+        var speed = parseInt($('inpFPS').value);
+        speed++;
+        if(speed <= 99){
+            $('inpFPS').value = speed;
+            app.updateSpeed(speed);
+        }
+    },
+
+    speedDown: function(){
+        var speed = parseInt($('inpFPS').value);
+        speed--;
+        if(speed >= 1) {
+            $('inpFPS').value = speed;
+            app.updateSpeed(speed);
+        }
+    },
+
+    updateSpeed: function(speed){
+        speed = parseInt(speed);
+        app.t = Math.floor(1000/speed);
+        if(speed < 99){
+            if(speed > 1){
+                $('inpSlower').disabled = false;
+                $('inpFaster').disabled = false;
+            } else {
+                $('inpSlower').disabled = true;
+                $('inpFaster').disabled = false;
+            }
+        } else {
+            $('inpSlower').disabled = false;
+            $('inpFaster').disabled = true;
+        }
     },
 
     switchRandom: function(){
@@ -475,6 +506,12 @@ function isNumeric(sString){
     return bResult;
 }
 
-function $(id){
-    return document.getElementById(id);
-}
+var $ = (function() {
+    var elements = {};
+    return function(id){
+        if(typeof elements[id] === "undefined") {
+            elements[id] = document.getElementById(id);
+        }
+        return elements[id];
+    };
+}());
