@@ -1,21 +1,30 @@
 body{
+    margin:0 auto;
+    padding:0;
     background-color:black;
     color:#999;
-    width:970px;
+    width:900px;
 }
 canvas{
     background-color:black;
     border:1px solid #000;
 }
 table{
-    height:350px;
+    width:900px;
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%, -50%);   
+    -webkit-transform:translate(-50%, -50%);
+    -moz-transform:translate(-50%, -50%);
+    -ms-transform:translate(-50%, -50%);
 }
 td{
     vertical-align:top;
     border:1px solid #333;
 }
 td#tdPS{
-    width:450px;
+    width:384px;
 }
 pre#codePS{
     max-height:550px; min-height:550px; height:auto !important; height:550px; /* IE6 min-height hack */
